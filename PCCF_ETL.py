@@ -40,23 +40,6 @@ PCCF_Column_Code = []
 for i in range(10):
     PCCF_Column_Code.append((i, PCCF_columns[i]))
 
-"""
-for i in range(len(file_list)-1):
-    row_key = str(i) + "-" + file_list[i][0:9]
-    PCCF_Dict[row_key] = {}
-    PCCF_Dict[row_key]['Pos_Code'] = file_list[i][0:6]
-    PCCF_Dict[row_key]['FSA'] = file_list[i][6:9]
-    PCCF_Dict[row_key]['PR'] = file_list[i][9:11]
-    PCCF_Dict[row_key]['CD_UID'] = file_list[i][11:15]
-    PCCF_Dict[row_key]['CSD_UID'] = file_list[i][15:22]
-    PCCF_Dict[row_key]['CSD_Name'] = file_list[i][22:92].strip(" ")
-    PCCF_Dict[row_key]['CSD_Type'] = file_list[i][92:95].strip(" ")
-    PCCF_Dict[row_key]['CCS_Code'] = file_list[i][95:98]
-    PCCF_Dict[row_key]['SAC'] = file_list[i][98:101]
-    PCCF_Dict[row_key]['SAC_Type'] = file_list[i][101]
-    
-"""
-
 #Populate Data Dictionary for DataFrame
 
 for i in range(len(file_list)-1):
@@ -99,51 +82,13 @@ PCCF_df['PR'] = PCCF_df['PR'].str.replace('60', 'YT')
 PCCF_df['PR'] = PCCF_df['PR'].str.replace('61', 'NT')
 PCCF_df['PR'] = PCCF_df['PR'].str.replace('62', 'NU')
 
-#Data Visualization - Plot number of entries per province
-"""
-PR_count = PCCF_df["PR"].value_counts()
-plt.figure("PR Entries")
-sns.barplot(PR_count.index, PR_count.values, alpha = 0.8)
-plt.title("# Records per Province")
-plt.xlabel("Provinces", fontsize = 12)
-plt.ylabel("Total Records", fontsize = 12)
-plt.show()
-
-
-OR 
-
-g = sns.factorplot("PR", data=PCCF_df, aspect=4.0, kind='count')
-"""
-
-#Data Visualization- Compare number of SAC_Types per Province between ON and QC
-"""
-ON_count = PCCF_df["SAC_Type"][PCCF_df["PR"] == "ON"].value_counts()
-QC_count = PCCF_df["SAC_Type"][PCCF_df["PR"] == "QC"].value_counts()
-plt.figure("ON vs. QC - # of Records per Sac Type")
-sns.barplot(ON_count.index, ON_count.values, alpha = 0.8); plt.xlabel('SAC Types', fontsize=12)
-sns.barplot(QC_count.index, QC_count.values, alpha = 0.6); plt.xlabel('SAC Types', fontsize=12)
-plt.title("# Records per SAC Type")
-plt.xlabel("SAC Types", fontsize = 12)
-plt.ylabel("Total Records", fontsize = 12)
-plt.show()
-
-OR
-
-ONandQC_df = PCCF_df[(PCCF_df['PR']=='ON') | (PCCF_df['PR']=='QC')]
-"""
-
-#Data Visualization - Compare number of SAC_Types per Province between ON and QC without Type 1
-"""
-ONandQC_df = PCCF_df[((PCCF_df['PR']=='ON') | (PCCF_df['PR']=='QC')) & (PCCF_df['SAC_Type'] != '1')]
-"""
-
 #Export Dataframe to Province-Specific CSV File
 
 def PR_Csv_Export(Province_Code):
     
     PR_df = PCCF_df[PCCF_df["PR"]== Province_Code.upper()]
     
-    file_path = directory + "\Sample_Python_Files\\" + Province_Code.upper()
+    file_path = directory + "\\" + Province_Code.upper()
     
     file_name = Province_Code + "_PCCF.csv"
      
